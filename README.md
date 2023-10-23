@@ -30,14 +30,16 @@ The following requirements are needed by this module:
 
 The following providers are used by this module:
 
-- <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) (>= 3.71.0)
+- <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) (3.77.0)
 
-- <a name="provider_random"></a> [random](#provider\_random) (>= 3.5.0)
+- <a name="provider_random"></a> [random](#provider\_random) (3.5.1)
 
 ## Resources
 
 The following resources are used by this module:
 
+- [azurerm_management_lock.lb_lock](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/management_lock) (resource)
+- [azurerm_resource_group.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/resource_group) (resource)
 - [azurerm_resource_group_template_deployment.telemetry](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/resource_group_template_deployment) (resource)
 - [random_id.telem](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/id) (resource)
 
@@ -46,9 +48,9 @@ The following resources are used by this module:
 
 The following input variables are required:
 
-### <a name="input_resource_group_name"></a> [resource\_group\_name](#input\_resource\_group\_name)
+### <a name="input_name"></a> [name](#input\_name)
 
-Description: The resource group where the resources will be deployed.
+Description: The name of the Resource Group
 
 Type: `string`
 
@@ -59,16 +61,55 @@ The following input variables are optional (have default values):
 ### <a name="input_enable_telemetry"></a> [enable\_telemetry](#input\_enable\_telemetry)
 
 Description: This variable controls whether or not telemetry is enabled for the module.  
-For more information see https://aka.ms/avm/telemetryinfo.  
+For more information see https://aka.ms/avm/telemetry.  
 If it is set to false, then no telemetry will be collected.
 
 Type: `bool`
 
 Default: `true`
 
+### <a name="input_location"></a> [location](#input\_location)
+
+Description: The Azure Region in which all resources in this example should be created.
+
+Type: `string`
+
+Default: `"eastus"`
+
+### <a name="input_lock"></a> [lock](#input\_lock)
+
+Description: The lock level to apply to the resources in this pattern. Default is `None`. Possible values are `None`, `CanNotDelete`, and `ReadOnly`.
+
+Type:
+
+```hcl
+object({
+    name = optional(string, null)
+    kind = optional(string, "None")
+  })
+```
+
+Default: `{}`
+
+### <a name="input_tags"></a> [tags](#input\_tags)
+
+Description: Map of tags to assign to the resources.
+
+Type: `map(any)`
+
+Default: `null`
+
 ## Outputs
 
-No outputs.
+The following outputs are exported:
+
+### <a name="output_resource_group_name"></a> [resource\_group\_name](#output\_resource\_group\_name)
+
+Description: n/a
+
+### <a name="output_resource_id"></a> [resource\_id](#output\_resource\_id)
+
+Description: n/a
 
 ## Modules
 

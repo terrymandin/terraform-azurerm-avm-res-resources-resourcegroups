@@ -10,7 +10,7 @@ terraform {
 
 variable "enable_telemetry" {
   type        = bool
-  default     = true
+  default     = false
   description = <<DESCRIPTION
 This variable controls whether or not telemetry is enabled for the module.
 For more information see https://aka.ms/avm/telemetryinfo.
@@ -25,15 +25,27 @@ module "naming" {
 }
 
 # This is required for resource modules
-resource "azurerm_resource_group" "this" {
-  name     = module.naming.resource_group.name_unique
-  location = "MYLOCATION"
-}
+#resource "azurerm_resource_group" "this" {
+#  name     = module.naming.resource_group.name_unique
+#  location = "MYLOCATION"
+#}
 
 # This is the module call
-module "MYMODULE" {
+module "terraform-azurerm-avm-res-resources-resourcegroups" { 
   source = "../../"
-  # source             = "Azure/avm-<res/ptn>-<name>/azurerm"
-  enable_telemetry = var.enable_telemetry
-  # ...
+  enable_telemetry = var.enable_telemetry 
+  name = module.naming.resource_group.name_unique
+  location = "eastus"
+  tags = {
+    environment = "dev"
+    costcenter  = "it"
+  }
+}
+
+output "resource_group_name" {
+  value = module.terraform-azurerm-avm-res-resources-resourcegroups.resource_group_name
+}
+
+output "resource_group_id" {
+  value = module.terraform-azurerm-avm-res-resources-resourcegroups.resource_id
 }

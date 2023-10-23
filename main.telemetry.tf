@@ -1,5 +1,5 @@
 resource "random_id" "telem" {
-  count       = local.enable_telemetry ? 1 : 0
+  count       = var.enable_telemetry ? 1 : 0
   byte_length = 4
 }
 
@@ -8,7 +8,7 @@ resource "random_id" "telem" {
 resource "azurerm_resource_group_template_deployment" "telemetry" {
   count               = var.enable_telemetry ? 1 : 0
   name                = local.telem_arm_deployment_name
-  resource_group_name = var.resource_group_name
+  resource_group_name = var.name
   deployment_mode     = "Incremental"
   template_content    = local.telem_arm_template_content
 }

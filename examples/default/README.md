@@ -16,7 +16,7 @@ terraform {
 
 variable "enable_telemetry" {
   type        = bool
-  default     = true
+  default     = false
   description = <<DESCRIPTION
 This variable controls whether or not telemetry is enabled for the module.
 For more information see https://aka.ms/avm/telemetryinfo.
@@ -31,17 +31,29 @@ module "naming" {
 }
 
 # This is required for resource modules
-resource "azurerm_resource_group" "this" {
-  name     = module.naming.resource_group.name_unique
-  location = "MYLOCATION"
-}
+#resource "azurerm_resource_group" "this" {
+#  name     = module.naming.resource_group.name_unique
+#  location = "MYLOCATION"
+#}
 
 # This is the module call
-module "MYMODULE" {
+module "terraform-azurerm-avm-res-resources-resourcegroups" { 
   source = "../../"
-  # source             = "Azure/avm-<res/ptn>-<name>/azurerm"
-  enable_telemetry = var.enable_telemetry
-  # ...
+  enable_telemetry = var.enable_telemetry 
+  name = module.naming.resource_group.name_unique
+  location = "eastus"
+  tags = {
+    environment = "dev"
+    costcenter  = "it"
+  }
+}
+
+output "resource_group_name" {
+  value = module.terraform-azurerm-avm-res-resources-resourcegroups.resource_group_name
+}
+
+output "resource_group_id" {
+  value = module.terraform-azurerm-avm-res-resources-resourcegroups.resource_id
 }
 ```
 
@@ -56,15 +68,11 @@ The following requirements are needed by this module:
 
 ## Providers
 
-The following providers are used by this module:
-
-- <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) (>= 3.7.0, < 4.0.0)
+No providers.
 
 ## Resources
 
-The following resources are used by this module:
-
-- [azurerm_resource_group.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/resource_group) (resource)
+No resources.
 
 <!-- markdownlint-disable MD013 -->
 ## Required Inputs
@@ -83,27 +91,35 @@ If it is set to false, then no telemetry will be collected.
 
 Type: `bool`
 
-Default: `true`
+Default: `false`
 
 ## Outputs
 
-No outputs.
+The following outputs are exported:
+
+### <a name="output_resource_group_id"></a> [resource\_group\_id](#output\_resource\_group\_id)
+
+Description: n/a
+
+### <a name="output_resource_group_name"></a> [resource\_group\_name](#output\_resource\_group\_name)
+
+Description: n/a
 
 ## Modules
 
 The following Modules are called:
-
-### <a name="module_MYMODULE"></a> [MYMODULE](#module\_MYMODULE)
-
-Source: ../../
-
-Version:
 
 ### <a name="module_naming"></a> [naming](#module\_naming)
 
 Source: Azure/naming/azurerm
 
 Version: 0.3.0
+
+### <a name="module_terraform-azurerm-avm-res-resources-resourcegroups"></a> [terraform-azurerm-avm-res-resources-resourcegroups](#module\_terraform-azurerm-avm-res-resources-resourcegroups)
+
+Source: ../../
+
+Version:
 
 <!-- markdownlint-disable-next-line MD041 -->
 ## Data Collection
